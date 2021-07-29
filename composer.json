@@ -1,0 +1,30 @@
+{
+  "name": "jacobsanford/php-development-libraries",
+  "description": "Libraries to install on dev instance for local PHP development and testing.",
+  "type": "metapackage",
+  "require": {
+    "drupal/coder": "^8.3",
+    "friendsofphp/php-cs-fixer": "^3",
+    "phpmd/phpmd": "^2",
+    "phpstan/phpstan": "^0"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "UNB Libraries",
+      "email": "libsupport@unb.ca"
+    }
+  ],
+  "scripts": {
+    "pre-update-cmd": [
+        "rm -f ./vendor/squizlabs/php_codesniffer/src/Standards/Drupal"
+    ],
+    "post-update-cmd": [
+        "ln -s ./vendor/drupal/coder/coder_sniffer/Drupal ./vendor/squizlabs/php_codesniffer/src/Standards/Drupal",
+        "test -d ./drupal-8 && cd drupal-8 && composer update --no-interaction; exit 0",
+        "test -d ./drupal-9 && cd drupal-9 && composer update --no-interaction; exit 0",
+        "test ! -d ./drupal-8 && composer create-project drupal-composer/drupal-project:8.x-dev drupal-8 --no-interaction; exit 0",
+        "test ! -d ./drupal-9 && composer create-project drupal-composer/drupal-project:9.x-dev drupal-9 --no-interaction; exit 0"
+    ]
+  }
+}
